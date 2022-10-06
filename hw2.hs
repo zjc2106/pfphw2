@@ -1,7 +1,8 @@
+import Distribution.Simple.Setup (trueArg)
 {-
 
  Name: Zachary Coeur
- Uni: 
+ Uni: zjc2106
 
  Collaborators:
 
@@ -83,7 +84,7 @@
 -}
 
 nondecreasing :: Ord a => [a] -> Bool
-nondecreasing _ = False -- Change this
+nondecreasing x = and (zipWith (>=) (drop 1 x) x)
 
 {- 2) Write a function "runLengths" that for a nondecreasing list,
       returns a list of (element, length) pairs, where length is the number
