@@ -1,4 +1,3 @@
-import Distribution.Simple.Setup (trueArg)
 {-
 
  Name: Zachary Coeur
@@ -84,7 +83,8 @@ import Distribution.Simple.Setup (trueArg)
 -}
 
 nondecreasing :: Ord a => [a] -> Bool
-nondecreasing x = and (zipWith (>=) (drop 1 x) x)
+nondecreasing [] = True
+nondecreasing x = and (zipWith (>=) (tail x) x)
 
 {- 2) Write a function "runLengths" that for a nondecreasing list,
       returns a list of (element, length) pairs, where length is the number
@@ -105,7 +105,13 @@ nondecreasing x = and (zipWith (>=) (drop 1 x) x)
 -}
 
 runLengths :: Ord a => [a] -> [(a,Int)]
-runLengths _ = [] -- Change this
+runLengths [] = []
+runLengths (x:xs) = (element, length') : runLengths restOfList
+      where
+            (sameElementList,restOfList) = span (==x) (x:xs)
+            element = x
+            length' = length sameElementList
+
 
 {- 3) Write a function "incCount" that takes an element and an
       association list of (element, count) pairs and updates the list
