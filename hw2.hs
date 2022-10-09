@@ -5,7 +5,7 @@
 
  Collaborators:
 
- References:
+ References: 
 
  ------------------------------
 
@@ -133,7 +133,10 @@ runLengths (x:xs) = (element, length') : runLengths restOfList
 -}
 
 incCount :: Eq a => a -> [(a,Int)] -> [(a,Int)]
-incCount _ _ = []
+incCount newEl [] = [(newEl, 1)]
+incCount newEl ((firstEl,elCount):xs)
+      | newEl == firstEl = (firstEl, succ elCount):xs
+      | otherwise = (firstEl,elCount):incCount newEl xs
 
 {- 4) Write a function "sorts" that verifies the first list is a sorted
       version of the second.  Use your "nondecreasing" function to verify
@@ -175,4 +178,11 @@ incCount _ _ = []
 -}
 
 sorts :: Ord a => [a] -> [a] -> Bool
-_ `sorts` _ = False -- Change this
+first `sorts` second
+      | nondecreasing first = and [x::Bool|x<-map (\(_, b) -> b==0) foldrList]
+      | otherwise = False
+      where
+            firstList = runLengths first
+            firstListNeg = [(element, -1*count)| (element,count)<-firstList]
+            foldrList = foldr incCount firstListNeg second
+
